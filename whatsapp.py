@@ -71,7 +71,7 @@ for name in names.keys():
         # find attach-document icon xpath and send doc
         attach_doc_xpath = '//button[@aria-label="Document"]/input'
         attach_doc_icon = driver.find_element_by_xpath(attach_doc_xpath)
-        attach_doc_icon.send_keys("/home/avishek/Downloads/Routledge_preprint_JJ.pdf")
+        attach_doc_icon.send_keys("/home/avishek/Code/data/whatsapp_automation/Invitation.pdf")
         time.sleep(3)
 
         # click the send button
