@@ -13,7 +13,7 @@ from selenium.webdriver import ActionChains
 from webdriver_manager.chrome import ChromeDriverManager
 
 sys.path.append("/home/avishek/Code")
-from data.whatsapp_automation.message import replace_message_name,holi_msg
+from data.whatsapp_automation.message import replace_message_name,marriage_msg
 from data.whatsapp_automation.names import names
 
 send_message = True
@@ -28,20 +28,24 @@ a = input("Press enter after you login.")
 
 for name in names.keys():
 
+    # If the value is present, then consider it as the name
+    # else take the key as the name. This enables using 
+    # salutations which are different from the Whatsapp names.
+    # Eg: "Amrish Mankar" : " Mankar Sir", this will send the message
+    # using Mankar Sir. Whereas "Devyani": " " will send the message
+    # using Devyani itself.
     first_name = names[name] if names[name] else name
-    message = replace_message_name(holi_msg,first_name)
+    message = replace_message_name(marriage_msg,first_name)
     
-
-    # Search for the search box and type the name
+    # Search for the search-box and type the name
     search_box_xpath = '//div[@contenteditable="true"][@data-tab="3"]' 
     search_box = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, search_box_xpath)))
     search_box.clear()
-
     time.sleep(1)
     search_box.send_keys(name)
     time.sleep(1)
 
-    # Search For Name and click it
+    # Click the person's name
     person_xpath = f'//span[@title="{name}"]'
     person = driver.find_element_by_xpath(person_xpath) 
     person.click()
@@ -54,11 +58,27 @@ for name in names.keys():
 
     if send_message:
         message_box.send_keys(message)
-        message_box.send_keys(':rainbow')
-        
+        # message_box.send_keys(':rainbow')
+        # message_box.send_keys(Keys.ENTER)
         message_box.send_keys(Keys.ENTER)
-        message_box.send_keys(Keys.ENTER)
+
+        # find attachment icon xpath and click
+        attachment_icon_xpath = '//span[@data-testid="clip"]'
+        attachment_icon = driver.find_element_by_xpath(attachment_icon_xpath)
+        attachment_icon.click()
+        time.sleep(1)
+
+        # find attach-document icon xpath and send doc
+        attach_doc_xpath = '//button[@aria-label="Document"]/input'
+        attach_doc_icon = driver.find_element_by_xpath(attach_doc_xpath)
+        attach_doc_icon.send_keys("/home/avishek/Downloads/Routledge_preprint_JJ.pdf")
+        time.sleep(3)
+
+        # click the send button
+        send_button_xpath = '//div[@aria-label="Send"]'
+        send_button = driver.find_element_by_xpath(send_button_xpath)
+        send_button.click()
 
     # Wait for sometime then close the browser
     time.sleep(1)
-driver.quit()
+# driver.quit()
