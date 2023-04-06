@@ -81,4 +81,4 @@ for name in names.keys():
 
     # Wait for sometime then close the browser
     time.sleep(1)
-# driver.quit()
+driver.quit()
